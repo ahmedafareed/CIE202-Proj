@@ -168,9 +168,6 @@
     <ClCompile Include="Actions\ActionLabel.cpp">
       <Filter>Actions</Filter>
     </ClCompile>
-    <ClCompile Include="Actions\ActionOptions.cpp">
-      <Filter>Actions</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\Component.h">
@@ -275,9 +272,6 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Actions\ActionLabel.h">
-      <Filter>Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="Actions\ActionOptions.h">
       <Filter>Actions</Filter>
     </ClInclude>
   </ItemGroup>

@@ -117,7 +117,6 @@
     <ClCompile Include="Actions\ActionConct.cpp" />
     <ClCompile Include="Actions\ActionLabel.cpp" />
     <ClCompile Include="Actions\ActionSelect.cpp" />
-    <ClCompile Include="Actions\ActionOptions.cpp" />
     <ClCompile Include="ApplicationManager.cpp" />
     <ClCompile Include="CMUgraphicsLib\CMUgraphics.cpp" />
     <ClCompile Include="CMUgraphicsLib\colors.cpp" />
@@ -172,7 +171,6 @@
     <ClInclude Include="Actions\ActionConct.h" />
     <ClInclude Include="Actions\ActionLabel.h" />
     <ClInclude Include="Actions\ActionSelect.h" />
-    <ClInclude Include="Actions\ActionOptions.h" />
     <ClInclude Include="ApplicationManager.h" />
     <ClInclude Include="CMUgraphicsLib\CMUgraphics.h" />
     <ClInclude Include="CMUgraphicsLib\colors.h" />
