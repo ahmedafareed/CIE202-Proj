@@ -1,12 +1,12 @@
 #pragma once
 #include "Component.h"
-#include "Connection.h"
-class Resistor:public Component
+
+class Ground :public Component
 {
 public:
-	Resistor(GraphicsInfo *r_GfxInfo);
+	Ground(GraphicsInfo* r_GfxInfo);
 	virtual void Operate();	//Calculates the volt on both terminals
-	virtual void Draw(UI*);	//Draws the resistor
+	virtual void Draw(UI*);	//Draws the Ground
 	virtual void setlabel(string label);
 	virtual string getlabel();
 };

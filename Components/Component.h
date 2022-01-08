@@ -10,11 +10,12 @@
 class Component
 {
 private:
-	string m_Label;
+	
+	
 protected:
 	//Each component has two ending terminals (term1, term2)
 	double term1_volt, term2_volt;	//voltage at terminals 1&2
-
+	string m_Label;
 	//Each terminal is connected to set of connections
 	Connection *term1_connections[MAX_CONNS]; //list of pointers to connections
 	Connection *term2_connections[MAX_CONNS];
@@ -22,8 +23,9 @@ protected:
 	int term1_conn_count;	//actual no. of connections to each terminal
 	int term2_conn_count;
 
-
+	bool selected = false;
 	GraphicsInfo *m_pGfxInfo;	//The parameters required to draw a component
+
 
 public:
 	Component(GraphicsInfo *r_GfxInfo);
@@ -34,6 +36,12 @@ public:
 
 	virtual void Operate() = 0;	//Calculates the output voltage according to the inputs
 	virtual void Draw(UI* ) = 0;	//for each component to Draw itself
+	GraphicsInfo* getGraphicsInfo();
+	bool getSelected();
+	void setSelected(bool sel);
+	virtual void setlabel(string label);
+	virtual string getlabel();
+
 	
 	
 	//virtual int GetOutPinStatus()=0;	//returns status of outputpin if LED, return -1

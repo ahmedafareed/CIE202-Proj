@@ -1,5 +1,7 @@
 #include "ActionAddRes.h"
 #include "..\ApplicationManager.h"
+#include <iostream>
+
 
 ActionAddRes::ActionAddRes(ApplicationManager *pApp):Action(pApp)
 {
@@ -23,7 +25,7 @@ void ActionAddRes::Execute()
 
 	//Clear Status Bar
 	pUI->ClearStatusBar();	
-	
+
 	
 	GraphicsInfo * pGInfo= new GraphicsInfo(2); //Gfx info to be used to construct the Comp
 	
@@ -38,6 +40,11 @@ void ActionAddRes::Execute()
 	 
 	Resistor* pR = new Resistor(pGInfo);
 	pManager->AddComponent(pR);
+	/*pUI->DrawString(Cx, compHeight - Cy, "Resistor");*/
+
+
+	
+
 }
 
 void ActionAddRes::Undo()

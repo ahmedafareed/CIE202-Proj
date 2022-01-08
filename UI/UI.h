@@ -3,7 +3,6 @@
 
 #include "..\CMUgraphicsLib\CMUgraphics.h"
 #include "..\Defs.h"
-
 #include <string>
 using namespace std;
 
@@ -29,7 +28,17 @@ struct GraphicsInfo
 	}
 
 };
+struct ConctsInfo
+{
+	int PointsCount;
+	Point* PointsList;
+	ConctsInfo(int PtsCnt)
+	{
+		PointsCount = PtsCnt;
+		PointsList = new Point[PointsCount];	//allocate required points
+	}
 
+};
 
 class UI
 {
@@ -39,12 +48,15 @@ class UI
 		//Note: Items are ordered here as they appear in the menu
 		//If you want to change the menu items order, just change the order here
 		ITM_RES,		//Resistor item in menu
-	
+		ITM_GRO,		//Ground item in menu
+		ITM_FUS,		//Fuse item in menu
+		ITM_BUZ,		//Buzzer item in menu
+		ITM_CON,
+		ITM_LABEL,
 		ITM_EXIT,		//Exit item
 		//TODO: Add more items names here
 	
 		ITM_DSN_CNT		//no. of design menu items ==> This should be the last line in this enum
-	
 	};
 
 
@@ -71,7 +83,7 @@ class UI
 
 						//Arbitrary values, you can change as you wish
 						COMP_WIDTH = 100,		//Component Image width
-						COMP_HEIGHT = 20;		//Component Image height
+						COMP_HEIGHT = 30;		//Component Image height
 
 	color DrawColor;		//Drawing color
 	color SelectColor;		//Highlighting color
@@ -92,6 +104,7 @@ public:
 	
 	// Input Functions  ---------------------------
 	void GetPointClicked(int &, int &);	//Get coordinate where user clicks
+	void GetmouseCoord(int&, int&);	//Get coordinate where user clicks with no wait
 	string GetSrting();		//Returns a string entered by the user
 
 	ActionType GetUserAction() const; //Reads the user click and maps it to an action
@@ -105,18 +118,27 @@ public:
 	void CreateStatusBar() const;	//Create Status bar
 
 	void ClearStatusBar() const;		//Clears the status bar
+	void Clearlabel(int lblx, int lby)const;
 	void ClearDrawingArea() const;	//Clears the drawing area
-
+	//bool select(const GraphicsInfo& r_GfxInfol);
 		
 	// Draws a resistor
-	void DrawResistor(const GraphicsInfo &r_GfxInfo, bool selected = false) const;
+	void DrawResistor(const GraphicsInfo &r_GfxInfo, bool selected = false) const; // selected was=fales 
+	// Draws a Ground
+	void DrawGround(const GraphicsInfo &r_GfxInfo, bool selected=false) const;
+	// Draws a Buzzer
+	void DrawBuzzer(const GraphicsInfo& r_GfxInfo, bool selected = false) const;
+	// Draws a Fuse
+	void DrawFuse(const GraphicsInfo& r_GfxInfo, bool selected = false) const;
 
-	///TODO: Make similar functions for drawing all other components, connections, .. etc
+	void DrawConnection(const GraphicsInfo& r_GfxInfo, bool selected) const;
 
-	// Draws Connection
-	void DrawConnection(const GraphicsInfo &r_GfxInfo, bool selected = false) const;
+	// Draws Line
+	void DrawLine(int x1, int y1, int x2, int y2) const;
+	void selectedDrawLine(int x1, int y1, int x2, int y2) const;
 	
 	void PrintMsg(string msg) const;	//Print a message on Status bar
+	void label(int lblx, int lbly, string msg) const;
 
 	~UI();
 };

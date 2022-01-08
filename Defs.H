@@ -6,14 +6,17 @@
 //All possible actions
 enum ActionType 
 {
-	ADD_RESISTOR,		//Add a resistor
+	ADD_RESISTOR,       //Add a resistor
+	ADD_GROUND,       //Add a GROUND
+	ADD_BUZZER,       //Add a buzzer
+	ADD_FUSE,       //Add a fuse
 	ADD_SWITCH,			//Add Switch
 	ADD_LAMP,			//Add LAMP
 	ADD_CONNECTION,		//Add Wire Connection
 
-	ADD_Label,			//Add Label to a Component, a Connection
+	LABEL,			//Add Label to a Component, a Connection
 	EDIT_Label,			//Edit Label of a Component, a Connection
-
+	OPTIONS,
 	Change_Switch,		//Change Switch Status in Simulation Mode
 
 	SELECT,		//Select a Component, a Connection

@@ -1,5 +1,7 @@
 #include "UI.h"
-
+#include <iostream>
+#include "../Components/Component.h"
+using namespace std;
 UI::UI()
 {
 	AppMode = DESIGN;	//Design Mode is the startup mode
@@ -39,6 +41,11 @@ int UI::getCompHeight() const
 void UI::GetPointClicked(int &x, int &y)
 {
 	pWind->WaitMouseClick(x, y);	//Wait for mouse click
+}
+
+void UI::GetmouseCoord(int& x, int& y)
+{
+	pWind->GetMouseCoord(x, y);	//Wait for mouse click
 }
 
 string UI::GetSrting()
@@ -98,7 +105,13 @@ ActionType UI::GetUserAction() const
 			switch (ClickedItemOrder)
 			{
 			case ITM_RES:	return ADD_RESISTOR;
-			case ITM_EXIT:	return EXIT;	
+			case ITM_GRO:	return ADD_GROUND;
+			case ITM_BUZ:	return ADD_BUZZER;
+			case ITM_FUS:	return ADD_FUSE;
+			case ITM_EXIT:	return EXIT;
+			case ITM_CON:	return ADD_CONNECTION;
+			case ITM_LABEL:	return LABEL;
+			
 			
 			default: return DSN_TOOL;	//A click on empty place in desgin toolbar
 			}
@@ -137,6 +150,17 @@ void UI::CreateStatusBar() const
 	pWind->SetPen(RED,3);
 	pWind->DrawLine(0, height-StatusBarHeight, width, height-StatusBarHeight);
 }
+void UI::DrawLine(int x1, int y1, int x2, int y2) const
+{
+	pWind->SetPen(BLACK, 2);
+	pWind->DrawLine(x1, y1, x2, y2);
+}
+
+void UI::selectedDrawLine(int x1, int y1, int x2, int y2) const
+{
+	pWind->SetPen(RED, 2);
+	pWind->DrawLine(x1, y1, x2, y2);
+}
 //////////////////////////////////////////////////////////////////////////////////
 void UI::PrintMsg(string msg) const
 {
@@ -149,6 +173,24 @@ void UI::PrintMsg(string msg) const
     pWind->SetFont(20, BOLD | ITALICIZED, BY_NAME, "Arial"); 
 	pWind->SetPen(MsgColor); 
 	pWind->DrawString(MsgX, height - MsgY, msg);
+}
+void UI::label(int lblx, int lby,string msg) const
+{
+	int lbly = lby - getCompHeight();
+	pWind->SetFont(20, BOLD | ITALICIZED, BY_NAME, "Arial");
+	pWind->SetPen(MsgColor);
+	pWind->DrawString(lblx,  lbly, msg);
+	 //Print the label
+
+}
+void UI::Clearlabel(int lblx, int lby)const
+{
+	int lbly = lby - getCompHeight();
+
+	//Overwrite using bachground color to erase the message
+	pWind->SetPen(BkGrndColor);
+	pWind->SetBrush(BkGrndColor);
+	pWind->DrawRectangle(lblx, lbly, getCompWidth(), getCompHeight());
 }
 //////////////////////////////////////////////////////////////////////////////////
 void UI::ClearStatusBar()const
@@ -182,6 +224,11 @@ void UI::CreateDesignToolBar()
 	//First prepare List of images for each menu item
 	string MenuItemImages[ITM_DSN_CNT];
 	MenuItemImages[ITM_RES] = "images\\Menu\\Menu_Resistor.jpg";
+	MenuItemImages[ITM_GRO] = "images\\Menu\\Menu_Ground1.jpg";
+	MenuItemImages[ITM_FUS] = "images\\Menu\\Menu_Fuse1.jpg";
+	MenuItemImages[ITM_BUZ] = "images\\Menu\\Menu_Buzzer1.jpg";
+	MenuItemImages[ITM_CON] = "images\\Menu\\connection.jpg";
+	MenuItemImages[ITM_LABEL] = "images\\Menu\\Menue_Label.jpg";
 	MenuItemImages[ITM_EXIT] = "images\\Menu\\Menu_Exit.jpg";
 
 	//TODO: Prepare image for each menu item and add it to the list
@@ -189,11 +236,11 @@ void UI::CreateDesignToolBar()
 	//Draw menu item one image at a time
 	for(int i=0; i<ITM_DSN_CNT; i++)
 		pWind->DrawImage(MenuItemImages[i],i*ToolItemWidth,0,ToolItemWidth, ToolBarHeight);
-
+		pWind->SetPen(RED, 3);
+		pWind->DrawLine(0, ToolBarHeight, width, ToolBarHeight);
 
 	//Draw a line under the toolbar
-	pWind->SetPen(RED,3);
-	pWind->DrawLine(0, ToolBarHeight, width, ToolBarHeight);	
+	
 
 }
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -221,17 +268,76 @@ void UI::DrawResistor(const GraphicsInfo &r_GfxInfo, bool selected) const
 
 	//Draw Resistor at Gfx_Info (1st corner)
 	pWind->DrawImage(ResImage, r_GfxInfo.PointsList[0].x, r_GfxInfo.PointsList[0].y, COMP_WIDTH, COMP_HEIGHT);
+	label(r_GfxInfo.PointsList[0].x, r_GfxInfo.PointsList[0].y, "resistor");
 }
+
+void UI::DrawGround(const GraphicsInfo& r_GfxInfo, bool selected) const
+{
+	string GroImage;
+	if (selected)
+		GroImage = "Images\\Comp\\Ground_HI.jpg";	//use image of highlighted Ground
+	else
+		GroImage = "Images\\Comp\\Ground.jpg";	//use image of the normal Ground
+
+	//Draw Ground at Gfx_Info (2ed corner)
+	pWind->DrawImage(GroImage, r_GfxInfo.PointsList[0].x, r_GfxInfo.PointsList[0].y, COMP_WIDTH, COMP_HEIGHT);
+	label(r_GfxInfo.PointsList[0].x, r_GfxInfo.PointsList[0].y, "ground");
+}
+void UI::DrawBuzzer(const GraphicsInfo& r_GfxInfo, bool selected) const
+{
+	string BuzImage;
+	if (selected)
+		BuzImage = "Images\\Comp\\Buzzer_HI.jpg";	//use image of highlighted Buzzer
+	else
+		BuzImage = "Images\\Comp\\Buzzer.jpg";	//use image of the normal Buzzer
+	
+	//Draw buzzer at Gfx_Info (3ed corner)
+	pWind->DrawImage(BuzImage, r_GfxInfo.PointsList[0].x, r_GfxInfo.PointsList[0].y, COMP_WIDTH, COMP_HEIGHT);
+	//pWind->DrawString(r_GfxInfo.PointsList[0].x, r_GfxInfo.PointsList[0].y - getCompHeight(), "buzzer");
+	label(r_GfxInfo.PointsList[0].x, r_GfxInfo.PointsList[0].y, "Buzzer");
+}
+void UI::DrawFuse(const GraphicsInfo& r_GfxInfo, bool selected) const
+{
+	string FusImage;
+	if (selected)
+		FusImage = "Images\\Comp\\Fuse_HI.jpg";	//use image of highlighted Fuse
+	else
+		FusImage = "Images\\Comp\\Fuse.jpg";	//use image of the normal Fuse
+
+	//Draw fuse at Gfx_Info (4th corner)
+	pWind->DrawImage(FusImage, r_GfxInfo.PointsList[0].x, r_GfxInfo.PointsList[0].y, COMP_WIDTH, COMP_HEIGHT);
+	label(r_GfxInfo.PointsList[0].x, r_GfxInfo.PointsList[0].y, "fuze");
+}
+
+void UI::DrawConnection(const GraphicsInfo& r_GfxInfo, bool selected) const
+{
+	if (selected)
+	{
+		DrawLine(r_GfxInfo.PointsList[0].x, r_GfxInfo.PointsList[0].y, r_GfxInfo.PointsList[1].x, r_GfxInfo.PointsList[1].y);
+		
+	}
+	else
+	{
+		selectedDrawLine(r_GfxInfo.PointsList[0].x, r_GfxInfo.PointsList[0].y, r_GfxInfo.PointsList[1].x, r_GfxInfo.PointsList[1].y);
+	}
+	//label(r_GfxInfo, "connection");
+}
+
 
 //TODO: Add similar functions to draw all other components
 
 
 
 
-void UI::DrawConnection(const GraphicsInfo &r_GfxInfo, bool selected) const
-{
-	//TODO: Add code to draw connection
-}
+//void UI::DrawConnection(const GraphicsInfo &r_GfxInfo1, const GraphicsInfo& r_GfxInfo2, bool selected) const
+//{
+//	if (selected)
+//	{
+//		pWind->SetPen(BLACK, 3);
+//		pWind->DrawLine(r_GfxInfo1.PointsList->x, r_GfxInfo1.PointsList->y, r_GfxInfo2.PointsList->x, r_GfxInfo2.PointsList->y);
+//	}
+//	              
+//}
 
 
 UI::~UI()
